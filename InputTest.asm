@@ -23,10 +23,44 @@ banksize $8000
 banks 1
 .endro
 
-.bank 0 slot 0
-.org $0000
+
+.enum $c000 export         ; export labels to symbol file.
+       satbuf dsb 256      ; sprite attribute table buffer.
+                           ; see the map for object offsets.
+       input db            ; input from player 1 controller.
+.ende
+
+;--( constants )--------------------------------------------------------------------
+
+
+; Bits for D-Pad und Button input
+.equ BUTTON_UP_BIT    0
+.equ BUTTON_DOWN_BIT  1
+.equ BUTTON_LEFT_BIT  2
+.equ BUTTON_RIGHT_BIT 3
+.equ BUTTON_1_BIT     4
+.equ BUTTON_2_BIT     5
+
+; coors for sprites
+.equ buttonUpPosX     65
+.equ buttonUpPosY     50
+.equ buttonDownPosX   65
+.equ buttonDownPosY   60
+.equ buttonLeftPosX   60
+.equ buttonLeftPosY   55
+.equ buttonRightPosX  70
+.equ buttonRightPosY  55
+.equ button1PosX     175
+.equ button1PosY      60
+.equ button2PosX     185
+.equ button2PosY      50
+.equ buttonStartPosX     175
+.equ buttonStartPosY     39
 
 ;--( main )--------------------------------------------------------------------
+
+.bank 0 slot 0
+.org $0000
 
 main:
     di    ; disable interrupts
@@ -43,13 +77,64 @@ main:
     call printBackgroundTiles
 
     call turnOnScreen
+
     
-loop4ever:
-    jp loop4ever
+mainLoop:
+
+    call getInput
+
+    ld hl, $3f00 + 0 ; sprite 0 vpos
+    call prepareVram
+
+    ld b, %00000001
+    ld c, buttonUpPosY
+    call updateNextSpritePos
+
+    ld b, %00000010
+    ld c, buttonDownPosY
+    call updateNextSpritePos
+
+    ld b, %00000100
+    ld c, buttonLeftPosY
+    call updateNextSpritePos
+
+    ld b, %00001000
+    ld c, buttonRightPosY
+    call updateNextSpritePos
+
+    ld b, %00010000
+    ld c,button1PosY
+    call updateNextSpritePos
+
+    ld b, %00100000
+    ld c,button2PosY
+    call updateNextSpritePos
+
+    ld b, %10000000
+    ld c,buttonStartPosY
+    call updateNextSpritePos
+
+    jp mainLoop
 
 
 ;--( Subroutines )-------------------------------------------------------------
 
+
+; getInput
+
+getInput:
+    ; start button
+    in a,$00
+    and %10000000
+    ld b, a
+
+    ; other buttons (D-pad, button 1 and 2)
+    in a,$dc
+    and %00111111
+    or b ; add start button bit, if present
+
+    ld (input), a
+    ret
 
 ; setUpVdpRegisters
 ;
@@ -64,8 +149,8 @@ VdpData:
 .db $82       ; Reg  5, base adress for sprite attribute table (!!)
 .db $ff       ; Reg  6, base adress for sprite patterns
 .db $85       ; Reg  7
-.db $ff       ; Reg  8
-.db $86       ; Reg  9
+.db $ff       ; reg. 8
+.db $86       ; reg. 9
 .db $ff       ; Reg 10
 VdpDataEnd:
 
@@ -103,7 +188,7 @@ clearVram:
 SpriteAttributeTableInit:
 
 ; vpos #0 -- #63
-.db 60, 50, $d0, 0, 0, 0, 0, 0
+.db 0, 0, 0, 0, 0, 0, 0, $d0
 .db 0, 0, 0, 0, 0, 0, 0, 0
 .db 0, 0, 0, 0, 0, 0, 0, 0
 .db 0, 0, 0, 0, 0, 0, 0, 0
@@ -118,9 +203,15 @@ SpriteAttributeTableInit:
 .db 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 .db 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 
-; hpos #0, char code #0 ...
-.db 175, 0
-.db 185, 0
+; horizontal positions and char codes for sprites
+.db buttonUpPosX,   0
+.db buttonDownPosX, 0
+.db buttonLeftPosX, 0
+.db buttonRightPosX, 0
+.db button1PosX, 0
+.db button2PosX, 0
+.db buttonStartPosX, 0
+
 
 SpriteAttributeTableInitEnd:
 
@@ -130,6 +221,22 @@ initSpriteAttributeTable:
     ld hl,SpriteAttributeTableInit ; source of data
     ld bc,SpriteAttributeTableInitEnd-SpriteAttributeTableInit  ; Counter for number of bytes to write
     call writeToVram
+    ret
+
+; updateNextSpritePos
+;
+; parameter registers
+; b: bit mask to test for next sprite
+; c: y-pos of next sprite, if visible
+
+updateNextSpritePos:
+    ld a,(input)
+    and b
+    jp z, updateNextSpritePosOut
+    ld c, 0 ; set y pos to 0
+    updateNextSpritePosOut:
+        ld a, c
+        out ($be), a
     ret
 
 ; printBackgroundTiles
