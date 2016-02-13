@@ -51,9 +51,9 @@ banks 1
 .equ buttonRightPosY   55
 .equ button1PosX      175
 .equ button1PosY       60
-.equ button2PosX      185
-.equ button2PosY       50
-.equ buttonStartPosX  175
+.equ button2PosX      186
+.equ button2PosY       51
+.equ buttonStartPosX  176
 .equ buttonStartPosY   39
 
 ;--( main )--------------------------------------------------------------------
@@ -207,9 +207,9 @@ SpriteAttributeTableInit:
 .db buttonDownPosX, 0
 .db buttonLeftPosX, 0
 .db buttonRightPosX, 0
-.db button1PosX, 0
-.db button2PosX, 0
-.db buttonStartPosX, 0
+.db button1PosX,     0
+.db button2PosX,     1
+.db buttonStartPosX, 2
 
 
 SpriteAttributeTableInitEnd:
