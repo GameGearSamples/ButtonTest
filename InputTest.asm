@@ -1,4 +1,4 @@
-; A Z80 assembler program to test D-pad, Start and other Buttons on a Sega Game Gear
+; A Z80 assembler program to test D-pad, Start and other buttons on a Sega Game Gear
 ;
 ; See https://github.com/GameGearSamples/InputTest for details
 
@@ -24,10 +24,9 @@ banks 1
 .endro
 
 
-.enum $c000 export         ; export labels to symbol file.
-       satbuf dsb 256      ; sprite attribute table buffer.
-                           ; see the map for object offsets.
-       input db            ; input from player 1 controller.
+.enum $c000 export
+   satbuf dsb 256      ; sprite attribute table buffer.
+   input db            ; input from player (buttons).
 .ende
 
 ;--( constants )--------------------------------------------------------------------
@@ -41,21 +40,21 @@ banks 1
 .equ BUTTON_1_BIT     4
 .equ BUTTON_2_BIT     5
 
-; coors for sprites
-.equ buttonUpPosX     65
-.equ buttonUpPosY     50
-.equ buttonDownPosX   65
-.equ buttonDownPosY   60
-.equ buttonLeftPosX   60
-.equ buttonLeftPosY   55
-.equ buttonRightPosX  70
-.equ buttonRightPosY  55
-.equ button1PosX     175
-.equ button1PosY      60
-.equ button2PosX     185
-.equ button2PosY      50
-.equ buttonStartPosX     175
-.equ buttonStartPosY     39
+; coors for sprites, if buttons are pressed
+.equ buttonUpPosX      65
+.equ buttonUpPosY      50
+.equ buttonDownPosX    65
+.equ buttonDownPosY    60
+.equ buttonLeftPosX    60
+.equ buttonLeftPosY    55
+.equ buttonRightPosX   70
+.equ buttonRightPosY   55
+.equ button1PosX      175
+.equ button1PosY       60
+.equ button2PosX      185
+.equ button2PosY       50
+.equ buttonStartPosX  175
+.equ buttonStartPosY   39
 
 ;--( main )--------------------------------------------------------------------
 
