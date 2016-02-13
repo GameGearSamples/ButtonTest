@@ -31,15 +31,6 @@ banks 1
 
 ;--( constants )--------------------------------------------------------------------
 
-
-; Bits for D-Pad und Button input
-.equ BUTTON_UP_BIT    0
-.equ BUTTON_DOWN_BIT  1
-.equ BUTTON_LEFT_BIT  2
-.equ BUTTON_RIGHT_BIT 3
-.equ BUTTON_1_BIT     4
-.equ BUTTON_2_BIT     5
-
 ; coors for sprites, if buttons are pressed
 .equ buttonUpPosX      65
 .equ buttonUpPosY      50
@@ -55,6 +46,17 @@ banks 1
 .equ button2PosY       51
 .equ buttonStartPosX  176
 .equ buttonStartPosY   39
+
+; bit masks for buttons
+.equ buttonUpMask     %00000001
+.equ buttonDownMask   %00000010
+.equ buttonLeftMask   %00000100
+.equ buttonRightMask  %00001000
+.equ allDpadMask      %00001111
+.equ button1Mask      %00010000
+.equ button2Mask      %00100000
+.equ buttonStartMask  %10000000
+
 
 ;--( main )--------------------------------------------------------------------
 
@@ -85,31 +87,31 @@ mainLoop:
     ld hl, $3f00 + 0 ; sprite 0 vpos
     call prepareVram
 
-    ld b, %00000001
+    ld b, buttonUpMask
     ld c, buttonUpPosY
     call updateNextSpritePos
 
-    ld b, %00000010
+    ld b, buttonDownMask
     ld c, buttonDownPosY
     call updateNextSpritePos
 
-    ld b, %00000100
+    ld b, buttonLeftMask
     ld c, buttonLeftPosY
     call updateNextSpritePos
 
-    ld b, %00001000
+    ld b, buttonRightMask
     ld c, buttonRightPosY
     call updateNextSpritePos
 
-    ld b, %00010000
+    ld b, button1Mask
     ld c,button1PosY
     call updateNextSpritePos
 
-    ld b, %00100000
+    ld b, button2Mask
     ld c,button2PosY
     call updateNextSpritePos
 
-    ld b, %10000000
+    ld b, buttonStartMask
     ld c,buttonStartPosY
     call updateNextSpritePos
 
@@ -124,12 +126,12 @@ mainLoop:
 getInput:
     ; start button
     in a,$00
-    and %10000000
+    and buttonStartMask
     ld b, a
 
     ; other buttons (D-pad, button 1 and 2)
     in a,$dc
-    and %00111111
+    and allDpadMask | button1Mask | button2Mask
     or b ; add start button bit, if present
 
     ld (input), a
