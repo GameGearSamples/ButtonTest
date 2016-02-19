@@ -31,23 +31,43 @@ banks 1
 
 ;--( constants )--------------------------------------------------------------------
 
-; coors for sprites, if buttons are pressed
-.equ buttonUpPosX      65
-.equ buttonUpPosY      50
-.equ buttonDownPosX    65
-.equ buttonDownPosY    60
-.equ buttonLeftPosX    60
-.equ buttonLeftPosY    55
-.equ buttonRightPosX   70
-.equ buttonRightPosY   55
-.equ button1PosX      175
-.equ button1PosY       60
-.equ button2PosX      186
-.equ button2PosY       51
-.equ buttonStartPosX  176
-.equ buttonStartPosY   39
+; coors for sprites in amge and checkboxes (CB), if buttons are pressed
+.equ upImageX        63
+.equ upImageY        51
+.equ upCheckboxX     60
+.equ upCheckboxY    119
 
-; bit masks for buttons
+.equ downImageX      63
+.equ downImageY      60
+.equ downCheckboxX   60
+.equ downCheckboxY  135
+
+.equ leftImageX      59
+.equ leftImageY      56
+.equ leftCheckboxX  116
+.equ leftCheckboxY  119
+
+.equ rightImageX     69
+.equ rightImageY     56
+.equ rightCheckboxX 116
+.equ rightCheckboxY 135
+
+.equ b1ImageX       174
+.equ b1ImageY        60
+.equ b1CheckboxX    180
+.equ b1CheckboxY    119
+
+.equ b2ImageX       185
+.equ b2ImageY        51
+.equ b2CheckboxX    180
+.equ b2CheckboxY    135
+
+.equ startImageX    175
+.equ startImageY     40
+.equ startCheckboxX 116
+.equ startCheckboxY 151
+
+; bit masks for buttons in input byte
 .equ buttonUpMask     %00000001
 .equ buttonDownMask   %00000010
 .equ buttonLeftMask   %00000100
@@ -88,31 +108,46 @@ mainLoop:
     call prepareVram
 
     ld b, buttonUpMask
-    ld c, buttonUpPosY
+    ld c, upImageY
+    call updateNextSpritePos
+    ld c, upCheckboxY
     call updateNextSpritePos
 
     ld b, buttonDownMask
-    ld c, buttonDownPosY
+    ld c, downImageY
+    call updateNextSpritePos
+    ld c, downCheckboxY
     call updateNextSpritePos
 
     ld b, buttonLeftMask
-    ld c, buttonLeftPosY
+    ld c, leftImageY
+    call updateNextSpritePos
+    ld c, leftCheckboxY
     call updateNextSpritePos
 
+
     ld b, buttonRightMask
-    ld c, buttonRightPosY
+    ld c, rightImageY
+    call updateNextSpritePos
+    ld c, rightCheckboxY
     call updateNextSpritePos
 
     ld b, button1Mask
-    ld c,button1PosY
+    ld c, b1ImageY
+    call updateNextSpritePos
+    ld c, b1CheckboxY
     call updateNextSpritePos
 
     ld b, button2Mask
-    ld c,button2PosY
+    ld c, b2ImageY
+    call updateNextSpritePos
+    ld c, b2CheckboxY
     call updateNextSpritePos
 
     ld b, buttonStartMask
-    ld c,buttonStartPosY
+    ld c, startImageY
+    call updateNextSpritePos
+    ld c, startCheckboxY
     call updateNextSpritePos
 
     jp mainLoop
@@ -189,8 +224,8 @@ clearVram:
 SpriteAttributeTableInit:
 
 ; vpos #0 -- #63
-.db 0, 0, 0, 0, 0, 0, 0, $d0
 .db 0, 0, 0, 0, 0, 0, 0, 0
+.db 0, 0, 0, 0, 0, 0, $d0, 0
 .db 0, 0, 0, 0, 0, 0, 0, 0
 .db 0, 0, 0, 0, 0, 0, 0, 0
 .db 0, 0, 0, 0, 0, 0, 0, 0
@@ -205,14 +240,20 @@ SpriteAttributeTableInit:
 .db 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 
 ; horizontal positions and char codes for sprites
-.db buttonUpPosX,   0
-.db buttonDownPosX, 0
-.db buttonLeftPosX, 0
-.db buttonRightPosX, 0
-.db button1PosX,     0
-.db button2PosX,     1
-.db buttonStartPosX, 2
-
+.db upImageX,       3
+.db upCheckboxX,    7
+.db downImageX,     4
+.db downCheckboxX,  7
+.db leftImageX,     5
+.db leftCheckboxX,  7
+.db rightImageX,    6
+.db rightCheckboxX, 7
+.db b1ImageX,       0
+.db b1CheckboxX,    7
+.db b2ImageX,       1
+.db b2CheckboxX,    7
+.db startImageX,    2
+.db startCheckboxX, 7
 
 SpriteAttributeTableInitEnd:
 
@@ -350,3 +391,5 @@ writeToVram:
     or b
     jp nz, writeToVram
     ret
+
+
