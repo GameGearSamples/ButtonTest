@@ -32,12 +32,13 @@ banks 1
 ;--( constants )--------------------------------------------------------------------
 
 ; coors for sprites in image and checkboxes, if buttons are pressed
+;
 .equ upImageX        63 ; sprite 0
 .equ upImageY        51
 .equ upCheckboxX     60 ; sprite 1
 .equ upCheckboxY    119
 
-.equ downImageX      63
+.equ downImageX      63 ; sprite 2 ...
 .equ downImageY      60
 .equ downCheckboxX   60
 .equ downCheckboxY  135
@@ -68,14 +69,14 @@ banks 1
 .equ startCheckboxY 151
 
 ; bit masks for buttons in input byte
-.equ buttonUpMask     %00000001
-.equ buttonDownMask   %00000010
-.equ buttonLeftMask   %00000100
-.equ buttonRightMask  %00001000
-.equ allDpadMask      %00001111
-.equ button1Mask      %00010000
-.equ button2Mask      %00100000
-.equ buttonStartMask  %10000000
+.equ upMask          %00000001
+.equ downMask        %00000010
+.equ leftMask        %00000100
+.equ rightMask       %00001000
+.equ allDpadMask     %00001111 ; all direction buttons are pressed
+.equ button1Mask     %00010000
+.equ button2Mask     %00100000
+.equ startButtonMask %10000000
 
 
 ;--( main )--------------------------------------------------------------------
@@ -106,7 +107,7 @@ mainLoop:
     call startSpritePosUpdates
 
     ; up
-    ld b, buttonUpMask
+    ld b, upMask
 
     ld c, upImageY
     call updateNextSpritePos
@@ -116,7 +117,7 @@ mainLoop:
 
 
     ; down
-    ld b, buttonDownMask
+    ld b, downMask
 
     ld c, downImageY
     call updateNextSpritePos
@@ -126,7 +127,7 @@ mainLoop:
 
 
     ; left
-    ld b, buttonLeftMask
+    ld b, leftMask
 
     ld c, leftImageY
     call updateNextSpritePos
@@ -136,7 +137,7 @@ mainLoop:
 
 
     ; right
-    ld b, buttonRightMask
+    ld b, rightMask
 
     ld c, rightImageY
     call updateNextSpritePos
@@ -166,7 +167,7 @@ mainLoop:
 
 
     ; start button
-    ld b, buttonStartMask
+    ld b, startButtonMask
 
     ld c, startImageY
     call updateNextSpritePos
@@ -191,7 +192,7 @@ mainLoop:
 getInput:
     ; start button
     in a,$00
-    and buttonStartMask
+    and startButtonMask
     ld b, a
 
     ; other buttons (D-pad, button 1 and 2)
