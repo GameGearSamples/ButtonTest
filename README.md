@@ -1,4 +1,4 @@
-# ButtonTest
+# Game Gear Button Test
 A Z80 assembler program to test D-pad, Start and other Buttons on a Sega Game Gear.
 
 Displays a Game Gear device and checkboxes for each button.

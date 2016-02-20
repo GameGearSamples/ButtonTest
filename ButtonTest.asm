@@ -1,6 +1,6 @@
 ; A Z80 assembler program to test D-pad, Start and other buttons on a Sega Game Gear
 ;
-; See https://github.com/GameGearSamples/InputTest for details
+; See https://github.com/GameGearSamples/ButtonTest for details
 
 
 ;--( ROM Setup )---------------------------------------------------------------
