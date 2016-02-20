@@ -8,7 +8,7 @@
 ; see http://www.villehelin.com/wla.txt for WLA-DX directives starting with "."
 
 ; SDSC tag and GG rom header
-.sdsctag 1.2,"InputTestGameGear","Simple Input Demo","SZR"
+.sdsctag 1.2,"ButtonTestGameGear","Simple Input Demo","szr"
 
 ; WLA-DX banking setup
 .memorymap
