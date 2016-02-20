@@ -4,7 +4,7 @@ A Z80 assembler program to test D-pad, Start and other Buttons on a Sega Game Ge
 Displays a Game Gear device and checkboxes for each button. Pressed buttons indacated by checked boxes
 and red sprites on the image (see screenshot below).
 
-<img src="images/InputTestGameGearScreenshot_320x240.png" alt="Screenshot Kega Fusion" width="50%" height="50%">
+<img src="images/Screenshot_160x144.png" alt="SMS Plus" width="100%" height="100%">
 
 Toolchain (minimal):
 * make
@@ -14,10 +14,11 @@ IDE (used to integrate command line tools above, an emulator to test and Git):
 * Qt Creator on OS X, http://www.qt.io/ide/
 
 Tested on emulators
-* Kega Fusion Emulator (OS X, see screenshot above), http://www.carpeludum.com/kega-fusion/
+* Kega Fusion Emulator (OS X), http://www.carpeludum.com/kega-fusion/
+* SMS Plus (OS X, screenshot above), http://www.bannister.org/software/sms.htm
 * Osmose via RetroPie on Raspberry Pi, http://blog.petrockblock.com/retropie/
 
-Tested on real hardware
+And tested on real hardware
 * via EverDrive GG
 
 Inspired by Maxim’s World of Stuff (SMS Tutorial)
