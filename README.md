@@ -4,7 +4,7 @@ A Z80 assembler program to test D-pad, Start and other Buttons on a Sega Game Ge
 Displays a Game Gear device and checkboxes for each button. Pressed buttons indacated by checked boxes
 and red sprites on the image (see screenshot below).
 
-<img src="images/Screenshot_160x144.png" alt="SMS Plus" width="100%" height="100%">
+<img src="images/Screenshot_160x144.png" alt="SMS Plus" width="160" height="144">
 
 Toolchain (minimal):
 * make
