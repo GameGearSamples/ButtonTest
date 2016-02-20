@@ -31,10 +31,10 @@ banks 1
 
 ;--( constants )--------------------------------------------------------------------
 
-; coors for sprites in amge and checkboxes (CB), if buttons are pressed
-.equ upImageX        63
+; coors for sprites in image and checkboxes, if buttons are pressed
+.equ upImageX        63 ; sprite 0
 .equ upImageY        51
-.equ upCheckboxX     60
+.equ upCheckboxX     60 ; sprite 1
 .equ upCheckboxY    119
 
 .equ downImageX      63
@@ -103,50 +103,74 @@ main:
 mainLoop:
 
     call getInput
+    call startSpritePosUpdates
 
-    ld hl, $3f00 + 0 ; sprite 0 vpos
-    call prepareVram
-
+    ; up
     ld b, buttonUpMask
+
     ld c, upImageY
     call updateNextSpritePos
+
     ld c, upCheckboxY
     call updateNextSpritePos
 
+
+    ; down
     ld b, buttonDownMask
+
     ld c, downImageY
     call updateNextSpritePos
+
     ld c, downCheckboxY
     call updateNextSpritePos
 
+
+    ; left
     ld b, buttonLeftMask
+
     ld c, leftImageY
     call updateNextSpritePos
+
     ld c, leftCheckboxY
     call updateNextSpritePos
 
 
+    ; right
     ld b, buttonRightMask
+
     ld c, rightImageY
     call updateNextSpritePos
+
     ld c, rightCheckboxY
     call updateNextSpritePos
 
+
+    ; button 1
     ld b, button1Mask
+
     ld c, b1ImageY
     call updateNextSpritePos
+
     ld c, b1CheckboxY
     call updateNextSpritePos
 
+
+    ; button 2
     ld b, button2Mask
+
     ld c, b2ImageY
     call updateNextSpritePos
+
     ld c, b2CheckboxY
     call updateNextSpritePos
 
+
+    ; start button
     ld b, buttonStartMask
+
     ld c, startImageY
     call updateNextSpritePos
+
     ld c, startCheckboxY
     call updateNextSpritePos
 
@@ -157,6 +181,12 @@ mainLoop:
 
 
 ; getInput
+;
+; gets input from buttons
+;
+; start button from port $00
+; D-pad an button 1, 2 from port $dc
+; stored bitwise in memory adress: input
 
 getInput:
     ; start button
@@ -263,6 +293,13 @@ initSpriteAttributeTable:
     ld hl,SpriteAttributeTableInit ; source of data
     ld bc,SpriteAttributeTableInitEnd-SpriteAttributeTableInit  ; Counter for number of bytes to write
     call writeToVram
+    ret
+
+; startSpritePosUpdates
+;
+startSpritePosUpdates:
+    ld hl, $3f00 + 0 ; sprite 0 vpos
+    call prepareVram
     ret
 
 ; updateNextSpritePos
