@@ -3,10 +3,10 @@ ASMFLAGS = -o
 LD = wlalink
 LDFLAGS = -vds
 
-SFILES = InputTest.asm
+SFILES = ButtonTest.asm
 IFILES = assets/backgroundPalette.inc assets/spritesPalette.inc
-OFILES = InputTest.o
-OUT = InputTest.gg
+OFILES = ButtonTest.o
+OUT = ButtonTest.gg
 
 all: $(OFILES) $(IFILES) makefile
 	echo [objects] > linkfile
